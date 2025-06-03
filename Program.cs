@@ -20,6 +20,8 @@ namespace BooksAndAuthors
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddScoped(typeof(GenericRepository<>), typeof(IGenericRepository<>));
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
