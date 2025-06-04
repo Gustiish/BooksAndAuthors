@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace BooksAndAuthors.Data
 {
@@ -78,5 +79,32 @@ namespace BooksAndAuthors.Data
                
             }
         }
+
+        public IEnumerable<T> GetAllIncluding(params Expression<Func<T, object>>[] includeProperty)
+        {
+            IQueryable<T> query = _dbSet;
+
+            foreach (var prop in includeProperty)
+            {
+                query = query.Include(prop);
+            }
+
+            return query.ToList();
+        }
+
+        public T GetIncluding(int id, params Expression<Func<T, object>>[] includeProperty)
+        {
+            IQueryable<T> query = _dbSet;
+
+            foreach (var prop in includeProperty)
+            {
+                query = query.Include(prop);
+            }
+
+            return query.FirstOrDefault(q => q.Id == id);
+        }
+
+
     }
 }
+

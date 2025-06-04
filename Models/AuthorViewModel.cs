@@ -6,8 +6,8 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-
-
+        public List<BookViewModel>? Books { get; }
+ 
 
     }
 }

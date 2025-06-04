@@ -2,6 +2,7 @@ using BooksAndAuthors.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace BooksAndAuthors
 {
     public class Program
@@ -20,7 +21,10 @@ namespace BooksAndAuthors
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddScoped(typeof(GenericRepository<>), typeof(IGenericRepository<>));
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+
 
             var app = builder.Build();
 

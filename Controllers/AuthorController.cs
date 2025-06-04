@@ -27,6 +27,8 @@ namespace BooksAndAuthors.Controllers
         // GET: AuthorController/Details/5
         public ActionResult Details(int id)
         {
+            ViewBag.Titles = string.Join(", ", _repo.Get(id).Books.Select(b => b.Title));
+            
             return View(_mapper.Map<AuthorViewModel>(_repo.Get(id)));
         }
 

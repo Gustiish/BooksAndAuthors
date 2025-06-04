@@ -7,6 +7,7 @@ namespace BooksAndAuthors.Data
     {
 
         public DbSet<Classes.Author> Authors { get; set; }
+        public DbSet<Models.BookViewModel> Books { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

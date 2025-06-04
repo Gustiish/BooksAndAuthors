@@ -1,4 +1,6 @@
-﻿namespace BooksAndAuthors.Data
+﻿using System.Linq.Expressions;
+
+namespace BooksAndAuthors.Data
 {
     public interface IGenericRepository<T> where T : class, IEntity
     {
@@ -10,5 +12,11 @@
 
         void Delete(T entity);
         void Add(T entity);
+
+        IEnumerable<T> GetAllIncluding(params Expression<Func<T, object>>[] includeProperty);
+
+        T GetIncluding(int id, params Expression<Func<T, object>>[] includeProperty);
+
+      
     }
 }
