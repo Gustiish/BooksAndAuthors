@@ -4,6 +4,7 @@ using BooksAndAuthors.Data;
 using BooksAndAuthors.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace BooksAndAuthors.Controllers
 {
@@ -27,9 +28,12 @@ namespace BooksAndAuthors.Controllers
         // GET: AuthorController/Details/5
         public ActionResult Details(int id)
         {
-            ViewBag.Titles = string.Join(", ", _repo.Get(id).Books.Select(b => b.Title));
-            
-            return View(_mapper.Map<AuthorViewModel>(_repo.Get(id)));
+
+            var authorWithBooks = _repo.GetIncluding(id, a => a.Books);
+            ViewBag.Titles = string.Join(", ", authorWithBooks.Books);
+
+            AuthorViewModel author = _mapper.Map<AuthorViewModel>(authorWithBooks);
+            return View(author);
         }
 
         // GET: AuthorController/Create
