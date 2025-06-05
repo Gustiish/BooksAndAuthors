@@ -6,7 +6,7 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public List<BookViewModel>? Books { get; }
+        public List<BookViewModel>? Books { get; set; }
  
 
     }

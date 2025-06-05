@@ -28,20 +28,20 @@ namespace BooksAndAuthors.Controllers
         // GET: BookController/Details/5
         public ActionResult Details(int id)
         {
-            return View(_repo.Get(id));
+            return View(_repo.GetIncluding(id, a => a.Author));
         }
 
         // GET: BookController/Create
         public ActionResult Create()
         {
-            ViewBag.Authors = new SelectList(Authors.GetAll(),"Id", "DisplayName");
+            ViewBag.Authors = new SelectList(Authors.GetAll(), "Id", "DisplayName");
             return View();
         }
 
         // POST: BookController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind("AuthorId, Id, Title, Description, Release")]BookViewModel book)
+        public ActionResult Create([Bind("AuthorId, Id, Title, Description, Release")] BookViewModel book)
         {
             try
             {
@@ -49,16 +49,12 @@ namespace BooksAndAuthors.Controllers
 
                 if (ModelState.IsValid)
                 {
-
-
-                   
                     _repo.Add(book);
-                    
                     return RedirectToAction(nameof(Index));
 
                 }
                 return View(book);
-                
+
             }
             catch
             {
@@ -69,37 +65,46 @@ namespace BooksAndAuthors.Controllers
         // GET: BookController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            ViewBag.Authors = new SelectList(Authors.GetAll(),"Id", "DisplayName");
+            return View(_repo.GetIncluding(id, book => book.Author));
         }
 
         // POST: BookController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        [ValidateAntiForgeryToken] //Vad ska man få ändra här? Titel, Författare, Beskrivning, Releasedate
+        public ActionResult Edit(int id, [Bind("AuthorId, Id, Title, Description, Release")] BookViewModel book)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                   
+                    _repo.Update(book);
+                    return RedirectToAction(nameof(Index));
+
+                }
+                return View(book);
             }
             catch
             {
-                return View();
+                return View(book);
             }
         }
 
         // GET: BookController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            return View(_repo.Get(id));
         }
 
         // POST: BookController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, BookViewModel book)
         {
             try
             {
+                _repo.Delete(_repo.Get(id));
                 return RedirectToAction(nameof(Index));
             }
             catch

@@ -2,6 +2,7 @@
 using BooksAndAuthors.Classes;
 using BooksAndAuthors.Data;
 using BooksAndAuthors.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -30,13 +31,13 @@ namespace BooksAndAuthors.Controllers
         {
 
             var authorWithBooks = _repo.GetIncluding(id, a => a.Books);
-            ViewBag.Titles = string.Join(", ", authorWithBooks.Books);
-
+            
             AuthorViewModel author = _mapper.Map<AuthorViewModel>(authorWithBooks);
             return View(author);
         }
 
         // GET: AuthorController/Create
+        [Authorize("Roles = Admin")]
         public ActionResult Create()
         {
             
@@ -66,6 +67,7 @@ namespace BooksAndAuthors.Controllers
         }
 
         // GET: AuthorController/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
 
@@ -100,6 +102,7 @@ namespace BooksAndAuthors.Controllers
         }
 
         // GET: AuthorController/Delete/5
+        [Authorize]
         public ActionResult Delete(int id)
         {
             return View(_mapper.Map<AuthorViewModel>(_repo.Get(id)));
